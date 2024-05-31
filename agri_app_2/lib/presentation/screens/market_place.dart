@@ -8,16 +8,35 @@ import 'package:agri_app_2/presentation/widget/bottom_nav_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:agri_app_2/providers/mycolor_provider.dart';
 
-class MarketPlace extends ConsumerWidget {
+import '../../crop/provider/crop_provider.dart'; // Import the crop provider
+
+class MarketPlace extends ConsumerStatefulWidget {
   const MarketPlace({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _MarketPlaceState createState() => _MarketPlaceState();
+}
+
+class _MarketPlaceState extends ConsumerState<MarketPlace> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch the crops when the widget is first built
+    Future.microtask(() => ref.read(cropProvider.notifier).getOrderCrops());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final myColor = ref.watch(myColorProvider);
+    final cropState = ref.watch(cropProvider);
 
     return Scaffold(
-      appBar: const AppBarWidget(),
-      drawer: const MenuBarWidget(),
+      appBar: const AppBarWidget(
+        userRole: '',
+      ),
+      drawer: const MenuBarWidget(
+        userRole: '',
+      ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         constraints: const BoxConstraints(maxWidth: 700.0),
@@ -41,49 +60,28 @@ class MarketPlace extends ConsumerWidget {
                 const SizedBox(height: 30),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Expanded(
-              child: GridView.count(
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 20,
-                  crossAxisCount: 2,
-                  children: [
-                    for (final crop in availableCrop3)
-                      OrderListManagement(crop: crop)
-                  ]),
+              child: cropState is CropLoadingState
+                  ? Center(child: CircularProgressIndicator())
+                  : cropState is CropLoadedState
+                      ? GridView.count(
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 20,
+                          crossAxisCount: 2,
+                          children: cropState.crops
+                              .map((crop) => OrderListManagement(crop: crop))
+                              .toList(),
+                        )
+                      : cropState is CropErrorState
+                          ? Center(child: Text('Error: ${cropState.error}'))
+                          : Center(child: Text('No crops available')),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBarWidget(),
-    );
-  }
-
-  Widget gridItem(String imagePath, String name, int amount) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: Image.asset(
-              imagePath,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Text(
-            '\$${amount.toStringAsFixed(0)}',
-            style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            name,
-            style: const TextStyle(fontWeight: FontWeight.normal),
-          ),
-        ],
+      bottomNavigationBar: const BottomNavBarWidget(
+        userRole: '',
       ),
     );
   }

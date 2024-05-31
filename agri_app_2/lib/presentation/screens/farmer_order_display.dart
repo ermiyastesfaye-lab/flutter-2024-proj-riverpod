@@ -15,8 +15,12 @@ class FarmerOrderDisplay extends ConsumerWidget {
     final myColor = ref.watch(myColorProvider);
 
     return Scaffold(
-      appBar: const AppBarWidget(),
-      drawer: const MenuBarWidget(),
+      appBar: const AppBarWidget(
+        userRole: '',
+      ),
+      drawer: const MenuBarWidget(
+        userRole: '',
+      ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         constraints: const BoxConstraints(maxWidth: 700.0),
@@ -121,7 +125,9 @@ class FarmerOrderDisplay extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBarWidget(),
+      bottomNavigationBar: const BottomNavBarWidget(
+        userRole: '',
+      ),
     );
   }
 }

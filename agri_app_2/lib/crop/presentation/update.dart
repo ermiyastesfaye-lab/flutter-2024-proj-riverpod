@@ -58,8 +58,12 @@ class CropMangement extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cropsAsync = ref.watch(cropProvider);
     return Scaffold(
-      appBar: const AppBarWidget(),
-      drawer: const MenuBarWidget(),
+      appBar: const AppBarWidget(
+        userRole: '',
+      ),
+      drawer: const MenuBarWidget(
+        userRole: '',
+      ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         constraints: const BoxConstraints(maxWidth: 700.0),
@@ -135,7 +139,9 @@ class CropMangement extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBarWidget(),
+      bottomNavigationBar: const BottomNavBarWidget(
+        userRole: '',
+      ),
     );
   }
 
@@ -209,8 +215,12 @@ class _UpdatePageState extends ConsumerState<UpdatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
-      drawer: const MenuBarWidget(),
+      appBar: const AppBarWidget(
+        userRole: '',
+      ),
+      drawer: const MenuBarWidget(
+        userRole: '',
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -418,7 +428,9 @@ class _UpdatePageState extends ConsumerState<UpdatePage> {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBarWidget(),
+      bottomNavigationBar: const BottomNavBarWidget(
+        userRole: '',
+      ),
     );
   }
 

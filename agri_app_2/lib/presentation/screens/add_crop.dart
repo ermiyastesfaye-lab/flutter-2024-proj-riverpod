@@ -15,8 +15,12 @@ class AddCrop extends ConsumerWidget {
     final cropForm = ref.watch(cropFormProvider);
 
     return Scaffold(
-      appBar: const AppBarWidget(),
-      drawer: const MenuBarWidget(),
+      appBar: const AppBarWidget(
+        userRole: '',
+      ),
+      drawer: const MenuBarWidget(
+        userRole: '',
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -157,7 +161,9 @@ class AddCrop extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBarWidget(),
+      bottomNavigationBar: const BottomNavBarWidget(
+        userRole: '',
+      ),
     );
   }
 

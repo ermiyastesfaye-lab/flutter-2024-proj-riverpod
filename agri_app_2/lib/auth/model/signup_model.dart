@@ -1,33 +1,23 @@
-enum Role {
-  FARMER,
-  BUYER
-}
-
 class SignupData {
+  final String id;
   final String email;
-  final String password;
-  final Role role;
+  final String role;
 
-  SignupData({
-    required this.email,
-    required this.password,
-    required this.role,
-  });
+  SignupData({required this.id, required this.email, required this.role});
+
+  factory SignupData.fromJson(Map<String, dynamic> json) {
+    return SignupData(
+      id: json['id'],
+      email: json['email'],
+      role: json['role'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'email': email,
-      'password': password,
-      'role': role.toString().split('.').last, // Convert enum to string
+      'role': role,
     };
-  }
-
-  static SignupData fromJson(Map<String, dynamic> signupDataJson) {
-  return SignupData(
-    email: signupDataJson['email'],
-    password: signupDataJson['password'],
-    role: signupDataJson['role'] == 'FARMER' ? Role.FARMER : Role.BUYER,
-  );
-
   }
 }

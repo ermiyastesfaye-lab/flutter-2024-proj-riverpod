@@ -97,8 +97,12 @@ class _AddCropState extends ConsumerState<AddCrop> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const AppBarWidget(),
-        drawer: const MenuBarWidget(),
+        appBar: const AppBarWidget(
+          userRole: '',
+        ),
+        drawer: const MenuBarWidget(
+          userRole: '',
+        ),
         body: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -359,6 +363,8 @@ class _AddCropState extends ConsumerState<AddCrop> {
             ),
           ),
         ),
-        bottomNavigationBar: const BottomNavBarWidget());
+        bottomNavigationBar: const BottomNavBarWidget(
+          userRole: '',
+        ));
   }
 }

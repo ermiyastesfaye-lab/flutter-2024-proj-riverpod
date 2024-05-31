@@ -1,157 +1,82 @@
-import 'package:agri_app_2/presentation/data/dummy_data.dart';
+import 'package:agri_app_2/auth/model/signin_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignUp extends StatelessWidget {
-  const SignUp({super.key});
+import '../../auth/login_main.dart';
+
+class SignUp extends ConsumerStatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends ConsumerState<SignUp> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  Role _selectedRole = Role.FARMER; // Default role is FARMER
+
+  Future<void> _signUp() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    try {
+      final authRepository = ref.read(authRepositoryProvider);
+      await authRepository.signUp(
+          email, password, confirmPassword, _selectedRole);
+      Navigator.pushReplacementNamed(context, '/logIn');
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign up failed: $error')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.only(top: 100, left: 16, right: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                child: Text(
-                  "Create Account",
-                  style: TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      color: myColor.secondary),
-                ),
-              ),
-              Center(
-                child: Text(
-                  "Create an account to access available agricultural products",
-                  style: TextStyle(fontSize: 18, color: myColor.tertiary),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 100),
-              SizedBox(
-                width: 200,
-                height: 50,
-                child: TextField(
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: myColor.primary),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    labelText: 'Email',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                height: 50,
-                child: DropdownButtonFormField<String>(
-                  items: ["Farmer", "Buyer"].map((role) {
-                    return DropdownMenuItem<String>(
-                      value: role,
-                      child: Text(role),
-                    );
-                  }).toList(),
-                  onChanged: (value) {},
-                  decoration: InputDecoration(
-                    labelText: "Role",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 200,
-                height: 50,
-                child: TextField(
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: myColor.primary),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      labelText: 'Password',
-                    ),
-                    obscureText: true),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 200,
-                height: 50,
-                child: TextField(
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: myColor.primary),
-                      ),
-                      labelText: 'Confirm Password',
-                    ),
-                    obscureText: true),
-              ),
-              const SizedBox(height: 20),
-              Center(
-                child: SizedBox(
-                  width: 370,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/dashBoard');
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: myColor.secondary,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Already have an account?',
-                    style: TextStyle(fontSize: 18, color: myColor.tertiary),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/logIn');
-                    },
-                    child: const Text("Log in", style: TextStyle(fontSize: 18)),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      // Handle Google login
-                    },
-                    icon: const Icon(Icons.android),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // Handle Facebook login
-                    },
-                    icon: const Icon(Icons.facebook),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // Handle Apple login
-                    },
-                    icon: const Icon(Icons.apple),
-                  ),
-                ],
-              ),
-            ],
-          ),
+      appBar: AppBar(
+        title: const Text('Sign Up'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            TextField(
+              controller: _confirmPasswordController,
+              decoration: const InputDecoration(labelText: 'Confirm Password'),
+              obscureText: true,
+            ),
+            DropdownButton<Role>(
+              value: _selectedRole,
+              onChanged: (Role? newValue) {
+                setState(() {
+                  _selectedRole = newValue!;
+                });
+              },
+              items: Role.values.map<DropdownMenuItem<Role>>((Role role) {
+                return DropdownMenuItem<Role>(
+                  value: role,
+                  child: Text(role.toString().split('.').last),
+                );
+              }).toList(),
+            ),
+            ElevatedButton(
+              onPressed: _signUp,
+              child: const Text('Sign Up'),
+            ),
+          ],
         ),
       ),
     );

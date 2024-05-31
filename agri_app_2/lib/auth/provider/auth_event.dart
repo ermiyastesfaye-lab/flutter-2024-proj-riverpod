@@ -17,4 +17,7 @@ class SignupEvent extends AuthEvent {
 
   @override
   List<Object?> get props => [email, password];
+
+  // ignore: body_might_complete_normally_nullable
+  Object? toJson() {}
 }

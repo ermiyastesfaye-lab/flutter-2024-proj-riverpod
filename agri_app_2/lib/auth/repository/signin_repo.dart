@@ -9,27 +9,37 @@ class AuthRepository {
 
   AuthRepository(this.dataProvider, this.sharedPreferences);
 
-  Future<AuthLoginData> login(
-    String email,
-    String password,
-    Role role,
-  ) async {
+  Future<AuthLoginData> login(String email, String password, Role role) async {
     try {
-      final data = await dataProvider.login(email, password, role);
-      final token = data['token'];
-      final userId = data['userId'];
+      final LoginData data = await dataProvider.login(email, password, role);
 
-      await sharedPreferences.setString('token', token);
-      await sharedPreferences.setInt('userId', userId);
+      await sharedPreferences.setString('token', data.token);
+      await sharedPreferences.setInt('userId', data.userId);
 
       return AuthLoginData(
-        token: token,
-        id: userId,
+        token: data.token,
+        id: data.userId,
       );
     } catch (error) {
       rethrow;
     }
   }
 
-  void update(AuthRepository Function(dynamic state) param0) {}
+  Future<AuthLoginData> signUp(
+      String email, String password, String confirmPassword, Role role) async {
+    try {
+      final LoginData data =
+          await dataProvider.signUp(email, password, confirmPassword, role);
+
+      await sharedPreferences.setString('token', data.token);
+      await sharedPreferences.setInt('userId', data.userId);
+
+      return AuthLoginData(
+        token: data.token,
+        id: data.userId,
+      );
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

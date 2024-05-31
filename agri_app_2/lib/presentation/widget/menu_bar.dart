@@ -1,10 +1,10 @@
-import 'package:agri_app_2/auth/presentation/signup.dart';
 import 'package:agri_app_2/presentation/data/dummy_data.dart';
 import 'package:agri_app_2/presentation/screens/dash_board.dart';
+import 'package:agri_app_2/presentation/screens/signup.dart';
 import 'package:flutter/material.dart';
 
 class MenuBarWidget extends StatelessWidget {
-  const MenuBarWidget({super.key});
+  const MenuBarWidget({super.key, required String userRole});
 
   @override
   Widget build(context) {

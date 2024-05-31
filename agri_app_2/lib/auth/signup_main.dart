@@ -1,12 +1,27 @@
-import 'package:agri_app_2/auth/data_provider/signup_data_provider.dart';
-import 'package:agri_app_2/auth/login_main.dart';
-import 'package:agri_app_2/auth/presentation/signup.dart';
-import 'package:agri_app_2/auth/repository/signup_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
+import 'package:agri_app_2/auth/data_provider/signin_data_provider.dart';
+import 'package:agri_app_2/auth/repository/signin_repo.dart';
+import 'package:agri_app_2/presentation/screens/signup.dart';
 
-void main() {
-  runApp(const ProviderScope(child: MyLogin()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
+  runApp(
+    ProviderScope(
+      overrides: [
+        authRepositoryProvider.overrideWithValue(
+          AuthRepository(
+            AuthDataProvider(Dio()),
+            sharedPreferences,
+          ),
+        ),
+      ],
+      child: const MySignup(),
+    ),
+  );
 }
 
 class MySignup extends StatelessWidget {
@@ -14,17 +29,15 @@ class MySignup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      overrides: [
-        authRegRepositoryProvider.overrideWithValue(
-          AuthRegRepository(dataProvider: AuthRegDataProvider()),
-        ),
-      ],
-      child: SignUp(),
+    return MaterialApp(
+      title: 'Sign Up',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: const SignUp(),
     );
   }
 }
 
-// Define the repository provider
-final authRegRepositoryProvider =
-    Provider<AuthRegRepository>((ref) => throw UnimplementedError());
+final authRepositoryProvider =
+    Provider<AuthRepository>((ref) => throw UnimplementedError());

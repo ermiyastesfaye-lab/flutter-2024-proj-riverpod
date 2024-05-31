@@ -1,6 +1,7 @@
 import 'package:agri_app_2/presentation/data/dummy_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class LandingPage extends ConsumerWidget {
   const LandingPage({super.key});
@@ -46,7 +47,7 @@ class LandingPage extends ConsumerWidget {
                       height: 45,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/logIn');
+                          context.go('/logIn');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: myColor.secondary,
@@ -65,7 +66,7 @@ class LandingPage extends ConsumerWidget {
                       height: 45,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/signUp');
+                          context.go('/signUp');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: myColor.secondary,

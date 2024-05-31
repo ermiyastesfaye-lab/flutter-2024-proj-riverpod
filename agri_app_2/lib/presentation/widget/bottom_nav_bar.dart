@@ -4,7 +4,7 @@ import 'package:agri_app_2/presentation/screens/dash_board.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBarWidget extends StatefulWidget {
-  const BottomNavBarWidget({super.key});
+  const BottomNavBarWidget({super.key, required String userRole});
 
   @override
   State<BottomNavBarWidget> createState() => _BottomNavBarWidgetState();

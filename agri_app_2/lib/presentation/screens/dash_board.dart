@@ -13,8 +13,12 @@ class DashBoardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: const AppBarWidget(),
-      drawer: const MenuBarWidget(),
+      appBar: const AppBarWidget(
+        userRole: '',
+      ),
+      drawer: const MenuBarWidget(
+        userRole: '',
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -165,7 +169,9 @@ class DashBoardScreen extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBarWidget(),
+      bottomNavigationBar: const BottomNavBarWidget(
+        userRole: '',
+      ),
     );
   }
 }
